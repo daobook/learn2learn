@@ -59,8 +59,8 @@ class TestMetaSGDAlgorithm(unittest.TestCase):
         meta = l2l.algorithms.MetaSGD(self.model,
                                       lr=INNER_LR,
                                       first_order=False)
-        num_params = sum([p.numel() for p in self.model.parameters()])
-        meta_params = sum([p.numel() for p in meta.parameters()])
+        num_params = sum(p.numel() for p in self.model.parameters())
+        meta_params = sum(p.numel() for p in meta.parameters())
         self.assertEqual(2 * num_params, meta_params)
         for lr in meta.lrs:
             self.assertTrue(close(lr, INNER_LR))

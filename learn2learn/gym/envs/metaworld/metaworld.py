@@ -50,8 +50,7 @@ class MetaWorldMod(MultiClassMultiTaskEnv, MetaEnv):
 
     def reset(self, **kwargs):
         self.collected_steps = 0
-        obs = super().reset(**kwargs)
-        return obs
+        return super().reset(**kwargs)
 
     # -------- MetaEnv Methods --------
     def sample_tasks(self, meta_batch_size):

@@ -52,7 +52,7 @@ class TestMAMLAlgorithm(unittest.TestCase):
         X = torch.randn(NUM_INPUTS, INPUT_SIZE)
         clone = maml.clone()
         # Fast adapt the clone
-        for step in range(3):
+        for _ in range(3):
             out = clone(X)
             loss = out.norm()
             clone.adapt(loss)
@@ -124,7 +124,7 @@ class TestMAMLAlgorithm(unittest.TestCase):
                                    allow_nograd=False)
         clone = maml.clone()
 
-        loss = sum([p.norm(p=2) for p in clone.parameters()])
+        loss = sum(p.norm(p=2) for p in clone.parameters())
         try:
             # Check that without allow_nograd, adaptation fails
             clone.adapt(loss)
@@ -136,7 +136,7 @@ class TestMAMLAlgorithm(unittest.TestCase):
         except:
             # Check that with allow_nograd, adaptation succeeds
             clone.adapt(loss, allow_nograd=True)
-            loss = sum([p.norm(p=2) for p in clone.parameters()])
+            loss = sum(p.norm(p=2) for p in clone.parameters())
             loss.backward()
             self.assertTrue(self.model[2].weight.grad is None)
             for p in self.model.parameters():
@@ -150,7 +150,7 @@ class TestMAMLAlgorithm(unittest.TestCase):
             allow_nograd=True,
         )
         clone = maml.clone()
-        loss = sum([p.norm(p=2) for p in clone.parameters()])
+        loss = sum(p.norm(p=2) for p in clone.parameters())
         # Check that without allow_nograd, adaptation succeeds thanks to init.
         orig_weight = self.model[2].weight.clone().detach()
         clone.adapt(loss)

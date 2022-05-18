@@ -29,7 +29,7 @@ def fast_adapt(batch, learner, loss, adaptation_steps, shots, ways, device):
     evaluation_data, evaluation_labels = data[evaluation_indices], labels[evaluation_indices]
 
     # Adapt the model
-    for step in range(adaptation_steps):
+    for _ in range(adaptation_steps):
         train_error = loss(learner(adaptation_data), adaptation_labels)
         train_error /= len(adaptation_data)
         learner.adapt(train_error)
@@ -117,7 +117,7 @@ def main(
         meta_valid_accuracy = 0.0
         meta_test_error = 0.0
         meta_test_accuracy = 0.0
-        for task in range(meta_batch_size):
+        for _ in range(meta_batch_size):
             # Compute meta-training loss
             learner = maml.clone()
             batch = train_tasks.sample()

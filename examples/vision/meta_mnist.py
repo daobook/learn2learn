@@ -69,7 +69,7 @@ def main(lr=0.005, maml_lr=0.01, iterations=1000, ways=5, shots=1, tps=32, fas=5
     opt = optim.Adam(meta_model.parameters(), lr=lr)
     loss_func = nn.NLLLoss(reduction='mean')
 
-    for iteration in range(iterations):
+    for _ in range(iterations):
         iteration_error = 0.0
         iteration_acc = 0.0
         for _ in range(tps):
@@ -88,7 +88,7 @@ def main(lr=0.005, maml_lr=0.01, iterations=1000, ways=5, shots=1, tps=32, fas=5
             evaluation_data, evaluation_labels = data[evaluation_indices], labels[evaluation_indices]
 
             # Fast Adaptation
-            for step in range(fas):
+            for _ in range(fas):
                 train_error = loss_func(learner(adaptation_data), adaptation_labels)
                 learner.adapt(train_error)
 

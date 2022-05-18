@@ -36,11 +36,7 @@ def main():
 
     pl.seed_everything(args.seed)
 
-    # Create tasksets using the benchmark interface
-    if False and args.dataset in ["mini-imagenet", "tiered-imagenet"]:
-        data_augmentation = "lee2019"
-    else:
-        data_augmentation = "normalize"
+    data_augmentation = "normalize"
     tasksets = l2l.vision.benchmarks.get_tasksets(
         name=args.dataset,
         train_samples=args.train_queries + args.train_shots,

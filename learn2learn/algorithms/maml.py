@@ -37,9 +37,9 @@ def maml_update(model, lr, grads=None):
     """
     if grads is not None:
         params = list(model.parameters())
-        if not len(grads) == len(list(params)):
+        if len(grads) != len(list(params)):
             msg = 'WARNING:maml_update(): Parameters and gradients have different length. ('
-            msg += str(len(params)) + ' vs ' + str(len(grads)) + ')'
+            msg += f'{len(params)} vs {len(grads)})'
             print(msg)
         for p, g in zip(params, grads):
             if g is not None:

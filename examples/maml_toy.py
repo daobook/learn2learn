@@ -36,7 +36,7 @@ def main():
 
     for i in range(TIMESTEPS):
         step_loss = 0.0
-        for t in range(TASKS_PER_STEP):
+        for _ in range(TASKS_PER_STEP):
             # Sample a task
             task_params = task_dist.sample()
             mu_i, sigma_i = task_params[:DIM], task_params[DIM:]

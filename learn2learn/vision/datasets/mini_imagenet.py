@@ -13,12 +13,12 @@ from learn2learn.data.utils import download_file_from_google_drive, download_fil
 
 
 def download_pkl(google_drive_id, data_root, mode):
-    filename = 'mini-imagenet-cache-' + mode
+    filename = f'mini-imagenet-cache-{mode}'
     file_path = os.path.join(data_root, filename)
 
-    if not os.path.exists(file_path + '.pkl'):
-        print('Downloading:', file_path + '.pkl')
-        download_file_from_google_drive(google_drive_id, file_path + '.pkl')
+    if not os.path.exists(f'{file_path}.pkl'):
+        print('Downloading:', f'{file_path}.pkl')
+        download_file_from_google_drive(google_drive_id, f'{file_path}.pkl')
     else:
         print("Data was already downloaded")
 
@@ -83,7 +83,10 @@ class MiniImagenet(data.Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.mode = mode
-        self._bookkeeping_path = os.path.join(self.root, 'mini-imagenet-bookkeeping-' + mode + '.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'mini-imagenet-bookkeeping-{mode}.pkl'
+        )
+
         if self.mode == 'test':
             google_drive_file_id = '1wpmY-hmiJUUlRBkO9ZDCXAcIpHEFdOhD'
             dropbox_file_link = 'https://www.dropbox.com/s/ye9jeb5tyz0x01b/mini-imagenet-cache-test.pkl?dl=1'
@@ -96,7 +99,7 @@ class MiniImagenet(data.Dataset):
         else:
             raise ValueError('Needs to be train, test or validation')
 
-        pickle_file = os.path.join(self.root, 'mini-imagenet-cache-' + mode + '.pkl')
+        pickle_file = os.path.join(self.root, f'mini-imagenet-cache-{mode}.pkl')
         try:
             if not self._check_exists() and download:
                 print('Downloading mini-ImageNet --', mode)
@@ -129,7 +132,9 @@ class MiniImagenet(data.Dataset):
         return len(self.x)
 
     def _check_exists(self):
-        return os.path.exists(os.path.join(self.root, 'mini-imagenet-cache-' + self.mode + '.pkl'))
+        return os.path.exists(
+            os.path.join(self.root, f'mini-imagenet-cache-{self.mode}.pkl')
+        )
 
 
 if __name__ == '__main__':

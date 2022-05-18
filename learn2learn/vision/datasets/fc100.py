@@ -68,13 +68,16 @@ class FC100(data.Dataset):
         if mode not in ['train', 'validation', 'test']:
             raise ValueError('mode must be train, validation, or test.')
         self.mode = mode
-        self._bookkeeping_path = os.path.join(self.root, 'fc100-bookkeeping-' + mode + '.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'fc100-bookkeeping-{mode}.pkl'
+        )
+
 
         if not self._check_exists() and download:
             self.download()
 
         short_mode = 'val' if mode == 'validation' else mode
-        fc100_path = os.path.join(self.root, 'FC100_' + short_mode + '.pickle')
+        fc100_path = os.path.join(self.root, f'FC100_{short_mode}.pickle')
         with open(fc100_path, 'rb') as f:
             u = pickle._Unpickler(f)
             u.encoding = 'latin1'

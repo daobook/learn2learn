@@ -16,9 +16,10 @@ import learn2learn as l2l
 def pairwise_distances_logits(a, b):
     n = a.shape[0]
     m = b.shape[0]
-    logits = -((a.unsqueeze(1).expand(n, m, -1) -
-                b.unsqueeze(0).expand(n, m, -1))**2).sum(dim=2)
-    return logits
+    return -(
+        (a.unsqueeze(1).expand(n, m, -1) - b.unsqueeze(0).expand(n, m, -1))
+        ** 2
+    ).sum(dim=2)
 
 
 def conv_block(in_channels, out_channels):

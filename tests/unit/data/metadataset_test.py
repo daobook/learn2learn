@@ -48,7 +48,7 @@ class TestMetaDataset(TestCase):
         self.assertEqual(sorted(self.omniglot_dataset.labels), sorted(self.ds.omniglot_classes))
 
     def test_get_item(self):
-        for i in range(5):
+        for _ in range(5):
             rand_index = np.random.randint(0, 26)
             data, label = self.meta_alpha_dataset[rand_index]
             assert_array_equal(data, [rand_index for _ in range(self.ds.features)])
@@ -68,9 +68,13 @@ class TestMetaDataset(TestCase):
         ]
         datasets = [l2l.data.MetaDataset(ds) for ds in datasets]
         union = l2l.data.UnionMetaDataset(datasets)
-        self.assertEqual(len(union), sum([len(ds) for ds in datasets]))
-        self.assertTrue(len(union.labels) == sum([len(ds.labels) for ds in datasets]))
-        self.assertTrue(len(union.indices_to_labels) == sum([len(ds.indices_to_labels) for ds in datasets]))
+        self.assertEqual(len(union), sum(len(ds) for ds in datasets))
+        self.assertTrue(len(union.labels) == sum(len(ds.labels) for ds in datasets))
+        self.assertTrue(
+            len(union.indices_to_labels)
+            == sum(len(ds.indices_to_labels) for ds in datasets)
+        )
+
         ref = datasets[1][23]
         item = union[len(datasets[0]) + 23]
         # self.assertTrue(item[1] == ref[1])  # Would fail, because labels are remapped.

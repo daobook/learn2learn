@@ -46,8 +46,7 @@ def google_sheets_login():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-    service = build('sheets', 'v4', credentials=creds)
-    return service
+    return build('sheets', 'v4', credentials=creds)
 
 
 if __name__ == '__main__':

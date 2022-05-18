@@ -140,7 +140,7 @@ class LightningANIL(LightningEpisodicModule):
         query_labels = labels[query_indices]
 
         # Adapt the classifier
-        for step in range(self.adaptation_steps):
+        for _ in range(self.adaptation_steps):
             preds = learner(support)
             train_error = self.loss(preds, support_labels)
             learner.adapt(train_error)

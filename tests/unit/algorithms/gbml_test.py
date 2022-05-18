@@ -119,7 +119,7 @@ class TestGBMLgorithm(unittest.TestCase):
                                    allow_nograd=False)
         clone = gbml.clone()
 
-        loss = sum([p.norm(p=2) for p in clone.parameters()])
+        loss = sum(p.norm(p=2) for p in clone.parameters())
         try:
             # Check that without allow_nograd, adaptation fails
             clone.adapt(loss)
@@ -127,7 +127,7 @@ class TestGBMLgorithm(unittest.TestCase):
         except:
             # Check that with allow_nograd, adaptation succeeds
             clone.adapt(loss, allow_nograd=True)
-            loss = sum([p.norm(p=2) for p in clone.parameters()])
+            loss = sum(p.norm(p=2) for p in clone.parameters())
             loss.backward()
             self.assertTrue(self.model[2].weight.grad is None)
             for p in self.model.parameters():
@@ -140,7 +140,7 @@ class TestGBMLgorithm(unittest.TestCase):
                                    lr=INNER_LR,
                                    allow_nograd=True)
         clone = gbml.clone()
-        loss = sum([p.norm(p=2) for p in clone.parameters()])
+        loss = sum(p.norm(p=2) for p in clone.parameters())
         # Check that without allow_nograd, adaptation succeeds thanks to init.
         orig_weight = self.model[2].weight.clone().detach()
         clone.adapt(loss)

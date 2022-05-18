@@ -110,8 +110,7 @@ class PrototypicalClassifier(torch.nn.Module):
         m = queries.size(0)
         prototypes = prototypes.unsqueeze(0).expand(m, n, -1)
         queries = queries.unsqueeze(1).expand(m, n, -1)
-        distance = (prototypes - queries).pow(2).sum(dim=2)
-        return distance
+        return (prototypes - queries).pow(2).sum(dim=2)
 
     @staticmethod
     def normalize(x, epsilon=EPS):

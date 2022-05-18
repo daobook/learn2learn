@@ -115,7 +115,10 @@ class FGVCAircraft(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self.bounding_box_crop = bounding_box_crop
-        self._bookkeeping_path = os.path.join(self.root, 'fgvc-aircraft-' + mode + '-bookkeeping.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'fgvc-aircraft-{mode}-bookkeeping.pkl'
+        )
+
 
         if not self._check_exists() and download:
             self.download()
@@ -191,7 +194,7 @@ class FGVCAircraft(Dataset):
         # read images from disk
         for image, label in image_labels:
             if label in split:
-                image_path = os.path.join(data_path, IMAGES_DIR, image + '.jpg')
+                image_path = os.path.join(data_path, IMAGES_DIR, f'{image}.jpg')
                 if self.bounding_box_crop:
                     self.bounding_boxes[image_path] = bbox_content[image]
                 label = split.index(label)

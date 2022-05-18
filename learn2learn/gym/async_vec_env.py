@@ -34,8 +34,7 @@ class AsyncVectorEnv(SubprocVecEnv):
         return all(reset)
 
     def sample_tasks(self, num_tasks):
-        tasks = self._env.unwrapped.sample_tasks(num_tasks)
-        return tasks
+        return self._env.unwrapped.sample_tasks(num_tasks)
 
     def step(self, actions):
         obs, rews, dones, ids, infos = super(AsyncVectorEnv, self).step(actions)
@@ -44,7 +43,7 @@ class AsyncVectorEnv(SubprocVecEnv):
     def reset(self):
         for i in range(self.num_envs):
             self.queue.put(i)
-        for i in range(self.num_envs):
+        for _ in range(self.num_envs):
             self.queue.put(None)
         obs, ids = super(AsyncVectorEnv, self).reset()
         return obs
