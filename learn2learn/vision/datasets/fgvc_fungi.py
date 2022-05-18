@@ -1469,7 +1469,10 @@ class FGVCFungi(Dataset):
         self.root = os.path.expanduser(root)
         self.transform = transform
         self.target_transform = target_transform
-        self._bookkeeping_path = os.path.join(self.root, 'fgvc-fungi-' + mode + '-bookkeeping.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'fgvc-fungi-{mode}-bookkeeping.pkl'
+        )
+
 
         if not self._check_exists() and download:
             self.download()

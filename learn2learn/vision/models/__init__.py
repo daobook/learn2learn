@@ -117,7 +117,7 @@ def get_pretrained_backbone(model, dataset, spec='default', root='~/data', downl
     """
     root = os.path.expanduser(root)
     destination_dir = os.path.join(root, 'pretrained_models', dataset)
-    destination = os.path.join(destination_dir, model + '.pth')
+    destination = os.path.join(destination_dir, f'{model}.pth')
     source = _BACKBONE_URLS[dataset][model][spec]
     if not os.path.exists(destination) and download:
         print(f'Downloading {model} weights for {dataset}.')

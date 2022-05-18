@@ -150,7 +150,7 @@ def main(
         meta_train_accuracy = 0.0
         meta_valid_error = 0.0
         meta_valid_accuracy = 0.0
-        for task in range(meta_batch_size):
+        for _ in range(meta_batch_size):
             # Compute meta-training loss
             task_features = l2l.clone_module(features)
             task_classifier = l2l.clone_module(classifier)
@@ -205,7 +205,7 @@ def main(
 
     meta_test_error = 0.0
     meta_test_accuracy = 0.0
-    for task in range(meta_batch_size):
+    for _ in range(meta_batch_size):
         # Compute meta-testing loss
         task_features = l2l.clone_module(features)
         task_classifier = l2l.clone_module(classifier)

@@ -39,8 +39,7 @@ class Particles2DEnv(MetaEnv):
         Tasks correspond to a goal point chosen uniformly at random.
         """
         goals = self.np_random.uniform(-0.5, 0.5, size=(num_tasks, 2))
-        tasks = [{'goal': goal} for goal in goals]
-        return tasks
+        return [{'goal': goal} for goal in goals]
 
     def set_task(self, task):
         self._task = task

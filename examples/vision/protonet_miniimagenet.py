@@ -15,9 +15,10 @@ from learn2learn.data.transforms import NWays, KShots, LoadData, RemapLabels
 def pairwise_distances_logits(a, b):
     n = a.shape[0]
     m = b.shape[0]
-    logits = -((a.unsqueeze(1).expand(n, m, -1) -
-                b.unsqueeze(0).expand(n, m, -1))**2).sum(dim=2)
-    return logits
+    return -(
+        (a.unsqueeze(1).expand(n, m, -1) - b.unsqueeze(0).expand(n, m, -1))
+        ** 2
+    ).sum(dim=2)
 
 
 def accuracy(predictions, targets):
@@ -151,7 +152,7 @@ if __name__ == '__main__':
         n_loss = 0
         n_acc = 0
 
-        for i in range(100):
+        for _ in range(100):
             batch = next(iter(train_loader))
 
             loss, acc = fast_adapt(model,
@@ -179,7 +180,7 @@ if __name__ == '__main__':
         loss_ctr = 0
         n_loss = 0
         n_acc = 0
-        for i, batch in enumerate(valid_loader):
+        for batch in valid_loader:
             loss, acc = fast_adapt(model,
                                    batch,
                                    args.test_way,

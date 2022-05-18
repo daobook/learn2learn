@@ -423,7 +423,10 @@ class Quickdraw(Dataset):
         self.root = os.path.expanduser(root)
         self.transform = transform
         self.target_transform = target_transform
-        self._bookkeeping_path = os.path.join(self.root, 'quickdraw-' + mode + '-bookkeeping.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'quickdraw-{mode}-bookkeeping.pkl'
+        )
+
 
         if not self._check_exists() and download:
             self.download()
@@ -439,7 +442,7 @@ class Quickdraw(Dataset):
             return False
         all_classes = sum(SPLITS.values(), [])
         for cls_name in all_classes:
-            cls_path = os.path.join(data_path, cls_name + '.npy')
+            cls_path = os.path.join(data_path, f'{cls_name}.npy')
             if not os.path.exists(cls_path):
                 return False
         return True
@@ -452,7 +455,7 @@ class Quickdraw(Dataset):
             os.mkdir(data_path)
         print('Downloading Quickdraw dataset (50Gb)')
         all_classes = sum(SPLITS.values(), [])
-        gcloud_url = GCLOUD_BUCKET + '*.npy'
+        gcloud_url = f'{GCLOUD_BUCKET}*.npy'
         cmd = ['gsutil', '-m', 'cp', gcloud_url, data_path]
         subprocess.call(cmd)
 
@@ -468,7 +471,7 @@ class Quickdraw(Dataset):
             offsets = []
             index_counter = 0
             for cls_idx, cls_name in enumerate(splits):
-                cls_path = os.path.join(data_path, cls_name + '.npy')
+                cls_path = os.path.join(data_path, f'{cls_name}.npy')
                 cls_data = np.load(cls_path, mmap_mode='r')
                 num_samples = cls_data.shape[0]
                 labels_to_indices[cls_idx] = list(range(index_counter, index_counter + num_samples))
@@ -499,7 +502,7 @@ class Quickdraw(Dataset):
         splits = sum(SPLITS.values(), []) if mode == 'all' else SPLITS[mode]
         self.data = []
         for cls_name in splits:
-            cls_path = os.path.join(data_path, cls_name + '.npy')
+            cls_path = os.path.join(data_path, f'{cls_name}.npy')
             self.data.append(np.load(cls_path, mmap_mode='r'))
 
     def __getitem__(self, i):

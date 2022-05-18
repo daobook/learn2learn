@@ -93,21 +93,18 @@ def pretrain(args):
 
     # Setup model
     if args.options.model == 'cnn4':
-        if args.options.dataset == 'cifar-fs' \
-                or args.options.dataset == 'fc100':
+        if args.options.dataset in ['cifar-fs', 'fc100']:
             model = l2l.vision.models.CNN4(
                 output_size=num_classes,
                 hidden_size=64,
                 embedding_size=256,
             )
     elif args.options.model == 'resnet12':
-        if args.options.dataset == 'mini-imagenet' \
-                or args.options.dataset == 'tiered-imagenet':
+        if args.options.dataset in ['mini-imagenet', 'tiered-imagenet']:
             model = l2l.vision.models.ResNet12(num_classes)
-        elif args.options.dataset == 'cifar-fs' \
-                or args.options.dataset == 'fc100':
+        elif args.options.dataset in ['cifar-fs', 'fc100']:
             model = l2l.vision.models.ResNet12(num_classes, dropblock_size=2)
-    if not args.options.load_weights == '':
+    if args.options.load_weights != '':
         model.features.load_state_dict(torch.load(args.options.load_weights))
     model.to(device)
     features = model.features

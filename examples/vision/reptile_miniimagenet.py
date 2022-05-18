@@ -25,7 +25,7 @@ def fast_adapt(batch, learner, adapt_opt, loss, adaptation_steps, shots, ways, b
     evaluation_data, evaluation_labels = data[evaluation_indices], labels[evaluation_indices]
 
     # Adapt the model
-    for step in range(adaptation_steps):
+    for _ in range(adaptation_steps):
         idx = torch.randint(
             adaptation_data.size(0),
             size=(batch_size, )
@@ -116,7 +116,7 @@ def main(
         for p in model.parameters():
             p.grad = torch.zeros_like(p.data)
 
-        for task in range(meta_bsz):
+        for _ in range(meta_bsz):
             # Compute meta-training loss
             learner = copy.deepcopy(model)
             adapt_opt = torch.optim.Adam(

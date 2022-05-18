@@ -23,7 +23,7 @@ class KroneckerLinearTests(unittest.TestCase):
         pass
 
     def _get_l2l_and_naive(self, m, n, vectorize_input):
-        x = torch.randn(n, m) if not vectorize_input else torch.randn(m * n)
+        x = torch.randn(m * n) if vectorize_input else torch.randn(n, m)
         kronecker = l2l.nn.KroneckerLinear(n, m)
         l2l_result = kronecker(x)
 

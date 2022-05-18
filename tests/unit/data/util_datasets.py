@@ -32,7 +32,7 @@ class TestDatasets():
         self.str_classes = ["0", "1", "2", "3", "4"]
         self.alphabets = list(string.ascii_lowercase)
         self.mnist_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        self.omniglot_classes = [i for i in range(1623)]
+        self.omniglot_classes = list(range(1623))
 
         tensor_data = torch.from_numpy(np.random.randn(self.n, self.features))
         tensor_labels = torch.from_numpy(np.random.choice(self.tensor_classes, self.n))

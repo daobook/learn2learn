@@ -163,6 +163,10 @@ def main(
         policy = policy.to(device)
     baseline = LinearValue(env.state_size, env.action_size)
 
+    # TRPO meta-optimization
+    backtrack_factor = 0.5
+    ls_max_steps = 15
+    max_kl = 0.01
     for iteration in range(num_iterations):
         iteration_reward = 0.0
         iteration_replays = []
@@ -197,10 +201,6 @@ def main(
         validation_reward = iteration_reward / meta_bsz
         print('validation_reward', validation_reward)
 
-        # TRPO meta-optimization
-        backtrack_factor = 0.5
-        ls_max_steps = 15
-        max_kl = 0.01
         if cuda:
             policy = policy.to(device, non_blocking=True)
             baseline = baseline.to(device, non_blocking=True)
@@ -243,9 +243,7 @@ def main(
 
 
 def evaluate(benchmark, policy, baseline, adapt_lr, gamma, tau, n_workers, seed, cuda):
-    device_name = 'cpu'
-    if cuda:
-        device_name = 'cuda'
+    device_name = 'cuda' if cuda else 'cpu'
     device = torch.device(device_name)
 
     # Parameters
@@ -265,7 +263,7 @@ def evaluate(benchmark, policy, baseline, adapt_lr, gamma, tau, n_workers, seed,
         task = ch.envs.Runner(env)
 
         # Adapt
-        for step in range(adapt_steps):
+        for _ in range(adapt_steps):
             adapt_episodes = task.run(clone, episodes=adapt_bsz)
             if cuda:
                 adapt_episodes = adapt_episodes.to(device, non_blocking=True)

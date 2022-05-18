@@ -14,11 +14,10 @@ from setuptools import (
 VERSIONFILE = 'learn2learn/_version.py'
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
-mo = re.search(VSRE, verstrline, re.M)
-if mo:
+if mo := re.search(VSRE, verstrline, re.M):
     VERSION = mo.group(1)
 else:
-    raise RuntimeError('Unable to find version string in %s.' % (VERSIONFILE,))
+    raise RuntimeError(f'Unable to find version string in {VERSIONFILE}.')
 
 # Compile with Cython
 # https://cython.readthedocs.io/en/latest/src/userguide/source_files_and_compilation.html
@@ -33,13 +32,20 @@ if use_cython:
     cmd_class = {'build_ext': build_ext}
 
 extensions = [
-    Extension(name='learn2learn.data.meta_dataset',
-              sources=['learn2learn/data/meta_dataset' + extension_type]), 
-    Extension(name='learn2learn.data.task_dataset',
-              sources=['learn2learn/data/task_dataset' + extension_type]), 
-    Extension(name='learn2learn.data.transforms',
-              sources=['learn2learn/data/transforms' + extension_type]), 
+    Extension(
+        name='learn2learn.data.meta_dataset',
+        sources=[f'learn2learn/data/meta_dataset{extension_type}'],
+    ),
+    Extension(
+        name='learn2learn.data.task_dataset',
+        sources=[f'learn2learn/data/task_dataset{extension_type}'],
+    ),
+    Extension(
+        name='learn2learn.data.transforms',
+        sources=[f'learn2learn/data/transforms{extension_type}'],
+    ),
 ]
+
 
 if use_cython:
     compiler_directives = {
@@ -56,7 +62,7 @@ install(
     packages=find_packages(),
     ext_modules=extensions,
     cmdclass=cmd_class,
-    zip_safe=False,  # as per Cython docs
+    zip_safe=False,
     version=VERSION,
     description='PyTorch Library for Meta-Learning Research',
     long_description=open('README.md', encoding='utf8').read(),
@@ -64,11 +70,13 @@ install(
     author='Debajyoti Datta, Ian bunner, Seb Arnold, Praateek Mahajan',
     author_email='smr.arnold@gmail.com',
     url='https://github.com/learnables/learn2learn',
-    download_url='https://github.com/learnables/learn2learn/archive/' + str(VERSION) + '.zip',
+    download_url=f'https://github.com/learnables/learn2learn/archive/{str(VERSION)}.zip',
     license='MIT',
     classifiers=[],
     scripts=[],
-    setup_requires=['cython>=0.28.5', ],
+    setup_requires=[
+        'cython>=0.28.5',
+    ],
     install_requires=[
         'numpy>=1.15.4',
         'gym>=0.14.0',

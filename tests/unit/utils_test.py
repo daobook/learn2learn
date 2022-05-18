@@ -127,7 +127,7 @@ class UtilTests(unittest.TestCase):
         # Compute reference gradients
         ref_grads = []
         for model, X in zip(ref_models, inputs):
-            for iteration in range(10):
+            for _ in range(10):
                 model.zero_grad()
                 clone = ref_clone_module(model)
                 out = clone(X)
@@ -138,7 +138,7 @@ class UtilTests(unittest.TestCase):
         # Compute cloned gradients
         l2l_grads = []
         for model, X in zip(l2l_models, inputs):
-            for iteration in range(10):
+            for _ in range(10):
                 model.zero_grad()
                 clone = l2l.clone_module(model)
                 out = clone(X)
@@ -172,7 +172,7 @@ class UtilTests(unittest.TestCase):
 
             # Adapt and measure loss
             learner = maml.clone()
-            for step in range(N_STEPS):
+            for _ in range(N_STEPS):
                 pred, hidden = learner(data)
                 loss = pred.norm(p=2)
                 learner.adapt(loss)
@@ -187,7 +187,7 @@ class UtilTests(unittest.TestCase):
 
             # Adapt a second time
             learner = maml.clone()
-            for step in range(N_STEPS):
+            for _ in range(N_STEPS):
                 pred, hidden = learner(data)
                 loss = pred.norm(p=2)
                 learner.adapt(loss)
@@ -306,7 +306,7 @@ class UtilTests(unittest.TestCase):
             fail = True
 
         finally:
-            assert fail == True
+            assert fail
 
     def test_module_detach_keep_requires_grad(self):
         l2l.detach_module(self.model, keep_requires_grad=True)

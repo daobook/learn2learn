@@ -139,11 +139,7 @@ class MAMLppTrainer:
             q_inputs = q_inputs.float().cuda(device=self._device)
             q_labels = q_labels.cuda(device=self._device)
 
-        # Derivative-Order Annealing
-        second_order = True
-        if epoch < self._derivative_order_annealing_from_epoch:
-            second_order = False
-
+        second_order = epoch >= self._derivative_order_annealing_from_epoch
         # Adapt the model on the support set
         for step in range(self._steps):
             # forward + backward + optimize

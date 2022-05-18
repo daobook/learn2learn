@@ -57,8 +57,8 @@ def collate_tokens(values, pad_idx, eos_idx=None, left_pad=False, move_eos_to_be
 
 class _BatchedDataset(torch.utils.data.Dataset):
     def __init__(self, batched):
-        self.sents = [s for s in batched[0]]
-        self.ys = [y for y in batched[1]]
+        self.sents = list(batched[0])
+        self.ys = list(batched[1])
     
     def __len__(self):
         return len(self.ys)
@@ -70,8 +70,8 @@ class _BatchedDataset(torch.utils.data.Dataset):
 def compute_loss(task, roberta, device, learner, loss_func, batch=15):
     loss = 0.0
     acc = 0.0
-    for i, (x, y) in enumerate(torch.utils.data.DataLoader(
-            _BatchedDataset(task), batch_size=batch, shuffle=True, num_workers=0)):
+    for x, y in torch.utils.data.DataLoader(
+            _BatchedDataset(task), batch_size=batch, shuffle=True, num_workers=0):
         # RoBERTa ENCODING
         x = collate_tokens([roberta.encode(sent) for sent in x], pad_idx=1)
         with torch.no_grad():

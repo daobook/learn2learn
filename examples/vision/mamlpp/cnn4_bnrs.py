@@ -191,17 +191,18 @@ class ConvBase_BNRS(torch.nn.Sequential):
                 adaptation_steps=adaptation_steps
             ),
         ]
-        for _ in range(layers - 1):
-            core.append(
-                ConvBlock_BNRS(
-                    hidden,
-                    hidden,
-                    kernel_size=(3, 3),
-                    max_pool=max_pool,
-                    max_pool_factor=max_pool_factor,
-                    adaptation_steps=adaptation_steps
-                )
+        core.extend(
+            ConvBlock_BNRS(
+                hidden,
+                hidden,
+                kernel_size=(3, 3),
+                max_pool=max_pool,
+                max_pool_factor=max_pool_factor,
+                adaptation_steps=adaptation_steps,
             )
+            for _ in range(layers - 1)
+        )
+
         super(ConvBase_BNRS, self).__init__(*core)
 
     def forward(self, x, step):

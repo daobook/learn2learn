@@ -70,15 +70,14 @@ class EpisodicBatcher(pl.LightningDataModule):
 class NoLeaveProgressBar(pl.callbacks.ProgressBar):
 
     def init_test_tqdm(self):
-        bar = tqdm.tqdm(
+        return tqdm.tqdm(
             desc='Testing',
             position=(2 * self.process_position),
             disable=self.is_disabled,
             leave=False,
             dynamic_ncols=True,
-            file=sys.stdout
+            file=sys.stdout,
         )
-        return bar
 
 
 class TrackTestAccuracyCallback(pl.callbacks.Callback):

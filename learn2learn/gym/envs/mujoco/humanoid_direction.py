@@ -58,8 +58,7 @@ class HumanoidDirectionEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
     def sample_tasks(self, num_tasks):
         directions = np.random.normal(size=(num_tasks, 2))
         directions /= np.linalg.norm(directions, axis=1)[..., np.newaxis]
-        tasks = [{'direction': direction} for direction in directions]
-        return tasks
+        return [{'direction': direction} for direction in directions]
 
     # -------- Mujoco Methods --------
     def _get_obs(self):
@@ -97,7 +96,7 @@ class HumanoidDirectionEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
         quad_impact_cost = min(quad_impact_cost, 10)
         reward = lin_vel_cost - quad_ctrl_cost - quad_impact_cost + alive_bonus
         qpos = self.sim.data.qpos
-        done = bool((qpos[2] < 1.0) or (qpos[2] > 2.0))
+        done = qpos[2] < 1.0 or qpos[2] > 2.0
         return self._get_obs(), reward, done, dict(reward_linvel=lin_vel_cost,
                                                    reward_quadctrl=-quad_ctrl_cost,
                                                    reward_alive=alive_bonus,
@@ -112,10 +111,8 @@ class HumanoidDirectionEnv(MetaEnv, MujocoEnv, gym.utils.EzPickle):
             self._get_viewer(mode).render()
             # window size used for old mujoco-py:
             width, height = 500, 500
-            data = self._get_viewer(mode).read_pixels(width,
-                                                      height,
-                                                      depth=False)
-            return data
+            return self._get_viewer(mode).read_pixels(width, height, depth=False)
+
         elif mode == 'human':
             self._get_viewer(mode).render()
 

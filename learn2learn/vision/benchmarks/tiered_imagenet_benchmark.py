@@ -19,13 +19,7 @@ def tiered_imagenet_tasksets(
     **kwargs,
 ):
     """Tasksets for tiered-ImageNet benchmarks."""
-    if data_augmentation is None:
-        to_tensor = ToTensor() if device is None else lambda x: x
-        train_data_transforms = Compose([
-            to_tensor,
-        ])
-        test_data_transforms = train_data_transforms
-    elif data_augmentation == 'normalize':
+    if data_augmentation is None or data_augmentation == 'normalize':
         to_tensor = ToTensor() if device is None else lambda x: x
         train_data_transforms = Compose([
             to_tensor,

@@ -62,18 +62,24 @@ class TieredImagenet(data.Dataset):
         if mode not in ['train', 'validation', 'test']:
             raise ValueError('mode must be train, validation, or test.')
         self.mode = mode
-        self._bookkeeping_path = os.path.join(self.root, 'tiered-imagenet-bookkeeping-' + mode + '.pkl')
-        google_drive_file_id = '1g1aIDy2Ar_MViF2gDXFYDBTR-HYecV07'
+        self._bookkeeping_path = os.path.join(
+            self.root, f'tiered-imagenet-bookkeeping-{mode}.pkl'
+        )
 
         if not self._check_exists() and download:
+            google_drive_file_id = '1g1aIDy2Ar_MViF2gDXFYDBTR-HYecV07'
+
             self.download(google_drive_file_id, self.root)
 
         short_mode = 'val' if mode == 'validation' else mode
         tiered_imaganet_path = os.path.join(self.root, 'tiered-imagenet')
-        images_path = os.path.join(tiered_imaganet_path, short_mode + '_images_png.pkl')
+        images_path = os.path.join(
+            tiered_imaganet_path, f'{short_mode}_images_png.pkl'
+        )
+
         with open(images_path, 'rb') as images_file:
             self.images = pickle.load(images_file)
-        labels_path = os.path.join(tiered_imaganet_path, short_mode + '_labels.pkl')
+        labels_path = os.path.join(tiered_imaganet_path, f'{short_mode}_labels.pkl')
         with open(labels_path, 'rb') as labels_file:
             self.labels = pickle.load(labels_file)
             self.labels = self.labels['label_specific']

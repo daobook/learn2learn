@@ -5,10 +5,6 @@ import gym
 import numpy as np
 
 is_py2 = (sys.version[0] == '2')
-if is_py2:
-    pass
-else:
-    pass
 
 
 class EnvWorker(mp.Process):
@@ -28,8 +24,7 @@ class EnvWorker(mp.Process):
         return observation, reward, done, {}
 
     def try_reset(self):
-        observation = self.env.reset()
-        return observation
+        return self.env.reset()
 
     def run(self):
         while True:

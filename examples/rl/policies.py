@@ -58,8 +58,7 @@ class CaviaDiagNormalPolicy(nn.Module):
     def forward(self, state):
 
         density = self.density(state)
-        action = density.sample()
-        return action
+        return density.sample()
 
     def reset_context(self):
         self.context_params[:] = 0  # torch.zeros(self.num_context_params, requires_grad=True).to(self.device)
@@ -97,8 +96,7 @@ class DiagNormalPolicy(nn.Module):
 
     def forward(self, state):
         density = self.density(state)
-        action = density.sample()
-        return action
+        return density.sample()
 
 
 class CategoricalPolicy(nn.Module):

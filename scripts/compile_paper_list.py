@@ -61,13 +61,13 @@ def main():
     if not values:
         print('No data found.')
     else:
-        for i, row in enumerate(reversed(values)):
+        for row in reversed(values):
             if len(row) >= 4:
-                content += '**' + row[1] + '**' + '\n'
+                content += f'**{row[1]}**' + '\n'
                 content += '<br />' + '\n'
-                content += 'by *' + row[2] + '*' + '\n'
+                content += f'by *{row[2]}*' + '\n'
                 content += '<br />' + '\n'
-                content += '[' + row[3] + '](' + row[3] + ')' + '\n'
+                content += f'[{row[3]}]({row[3]})' + '\n'
                 if len(row) >= 5:
                     content += '<br />' + '\n'
                     content += row[4] + '\n'

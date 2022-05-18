@@ -158,8 +158,7 @@ class DropBlock(nn.Module):
                 (left_padding, right_padding, left_padding, right_padding)
             )
 
-        block_mask = 1 - padded_mask
-        return block_mask
+        return 1 - padded_mask
 
 
 class ResNet12Backbone(nn.Module):
@@ -176,11 +175,7 @@ class ResNet12Backbone(nn.Module):
         super(ResNet12Backbone, self).__init__()
         self.inplanes = channels
         block = BasicBlock
-        if wider:
-            num_filters = [64, 160, 320, 640]
-        else:
-            num_filters = [64, 128, 256, 512]
-
+        num_filters = [64, 160, 320, 640] if wider else [64, 128, 256, 512]
         self.layer1 = self._make_layer(
             block,
             num_filters[0],
@@ -246,16 +241,18 @@ class ResNet12Backbone(nn.Module):
                           kernel_size=1, stride=1, bias=False),
                 nn.BatchNorm2d(planes * block.expansion),
             )
-        layers = []
-        layers.append(block(
-            self.inplanes,
-            planes,
-            stride,
-            downsample,
-            dropblock_dropout,
-            drop_block,
-            block_size)
-        )
+        layers = [
+            block(
+                self.inplanes,
+                planes,
+                stride,
+                downsample,
+                dropblock_dropout,
+                drop_block,
+                block_size,
+            )
+        ]
+
         self.inplanes = planes * block.expansion
         return nn.Sequential(*layers)
 

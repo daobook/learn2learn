@@ -44,7 +44,7 @@ def fast_adapt(batch,
     adaptation_data, adaptation_labels = data[adaptation_indices], labels[adaptation_indices]
     evaluation_data, evaluation_labels = data[evaluation_indices], labels[evaluation_indices]
 
-    for step in range(adaptation_steps):
+    for _ in range(adaptation_steps):
         train_error = loss(learner(adaptation_data), adaptation_labels)
         learner.adapt(train_error)
 
@@ -142,7 +142,7 @@ def main(
         meta_valid_accuracy = 0.0
         meta_test_error = 0.0
         meta_test_accuracy = 0.0
-        for task in range(meta_bsz):
+        for _ in range(meta_bsz):
             # Compute meta-training loss
             learner = head.clone()
             batch = train_tasks.sample()

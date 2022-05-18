@@ -116,12 +116,17 @@ class ConvBase(torch.nn.Sequential):
                           max_pool=max_pool,
                           max_pool_factor=max_pool_factor),
                 ]
-        for _ in range(layers - 1):
-            core.append(ConvBlock(hidden,
-                                  hidden,
-                                  kernel_size=(3, 3),
-                                  max_pool=max_pool,
-                                  max_pool_factor=max_pool_factor))
+        core.extend(
+            ConvBlock(
+                hidden,
+                hidden,
+                kernel_size=(3, 3),
+                max_pool=max_pool,
+                max_pool_factor=max_pool_factor,
+            )
+            for _ in range(layers - 1)
+        )
+
         super(ConvBase, self).__init__(*core)
 
 
@@ -156,8 +161,7 @@ class OmniglotFC(torch.nn.Module):
         if sizes is None:
             sizes = [256, 128, 64, 64]
         layers = [LinearBlock(input_size, sizes[0]), ]
-        for s_i, s_o in zip(sizes[:-1], sizes[1:]):
-            layers.append(LinearBlock(s_i, s_o))
+        layers.extend(LinearBlock(s_i, s_o) for s_i, s_o in zip(sizes[:-1], sizes[1:]))
         layers = torch.nn.Sequential(*layers)
         self.features = torch.nn.Sequential(
             l2l.nn.Flatten(),

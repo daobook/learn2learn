@@ -41,9 +41,7 @@ def magic_box(x):
     loss.backward()
     ~~~
     """
-    if isinstance(x, torch.Tensor):
-        return torch.exp(x - x.detach())
-    return x
+    return torch.exp(x - x.detach()) if isinstance(x, torch.Tensor) else x
 
 
 def clone_parameters(param_list):
@@ -273,9 +271,9 @@ def update_module(module, updates=None, memo=None):
         memo = {}
     if updates is not None:
         params = list(module.parameters())
-        if not len(updates) == len(list(params)):
+        if len(updates) != len(list(params)):
             msg = 'WARNING:update_module(): Parameters and updates have different length. ('
-            msg += str(len(params)) + ' vs ' + str(len(updates)) + ')'
+            msg += f'{len(params)} vs {len(updates)})'
             print(msg)
         for p, g in zip(params, updates):
             p.update = g
@@ -285,24 +283,22 @@ def update_module(module, updates=None, memo=None):
         p = module._parameters[param_key]
         if p in memo:
             module._parameters[param_key] = memo[p]
-        else:
-            if p is not None and hasattr(p, 'update') and p.update is not None:
-                updated = p + p.update
-                p.update = None
-                memo[p] = updated
-                module._parameters[param_key] = updated
+        elif p is not None and hasattr(p, 'update') and p.update is not None:
+            updated = p + p.update
+            p.update = None
+            memo[p] = updated
+            module._parameters[param_key] = updated
 
     # Second, handle the buffers if necessary
     for buffer_key in module._buffers:
         buff = module._buffers[buffer_key]
         if buff in memo:
             module._buffers[buffer_key] = memo[buff]
-        else:
-            if buff is not None and hasattr(buff, 'update') and buff.update is not None:
-                updated = buff + buff.update
-                buff.update = None
-                memo[buff] = updated
-                module._buffers[buffer_key] = updated
+        elif buff is not None and hasattr(buff, 'update') and buff.update is not None:
+            updated = buff + buff.update
+            buff.update = None
+            memo[buff] = updated
+            module._buffers[buffer_key] = updated
 
     # Then, recurse for each submodule
     for module_key in module._modules:
@@ -365,7 +361,7 @@ class _ImportRaiser(object):
         self.command = command
 
     def raise_import(self):
-        msg = self.name + ' required. Try: ' + self.command
+        msg = f'{self.name} required. Try: {self.command}'
         raise ImportError(msg)
 
     def __getattr__(self, *args, **kwargs):

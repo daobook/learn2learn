@@ -67,7 +67,10 @@ class CIFARFS(ImageFolder):
             self._process_zip()
         mode = 'val' if mode == 'validation' else mode
         self.processed_root = os.path.join(self.processed_root, mode)
-        self._bookkeeping_path = os.path.join(self.root, 'cifarfs-' + mode + '-bookkeeping.pkl')
+        self._bookkeeping_path = os.path.join(
+            self.root, f'cifarfs-{mode}-bookkeeping.pkl'
+        )
+
         super(CIFARFS, self).__init__(root=self.processed_root,
                                       transform=self.transform,
                                       target_transform=self.target_transform)

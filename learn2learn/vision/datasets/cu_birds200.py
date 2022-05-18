@@ -334,9 +334,9 @@ class CUBirds200(torch.utils.data.Dataset):
         self.include_imagenet_duplicates = include_imagenet_duplicates
         self.bounding_box_crop = bounding_box_crop
         self._bookkeeping_path = os.path.join(
-            self.root,
-            'cubirds200-' + mode + '-bookkeeping.pkl'
+            self.root, f'cubirds200-{mode}-bookkeeping.pkl'
         )
+
 
         if not self._check_exists() and download:
             self.download()
@@ -418,8 +418,7 @@ class CUBirds200(torch.utils.data.Dataset):
         return image, label
 
     def __len__(self):
-        length = len(self.data)
-        return length
+        return len(self.data)
 
 
 if __name__ == '__main__':

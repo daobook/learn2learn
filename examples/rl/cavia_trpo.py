@@ -63,10 +63,11 @@ def fast_adapt_a2c(clone, train_episodes, adapt_lr, baseline, gamma, tau, first_
                               retain_graph=second_order,
                               create_graph=second_order)
 
-    if not first_order:
-        clone.context_params = clone.context_params - adapt_lr * gradients[0]
-    else:
-        clone.context_params = clone.context_params - adapt_lr * gradients[0].detach()
+    clone.context_params = (
+        clone.context_params - adapt_lr * gradients[0].detach()
+        if first_order
+        else clone.context_params - adapt_lr * gradients[0]
+    )
 
     return l2l.utils.update_module(clone)
     # return l2l.algorithms.maml.maml_update(clone, adapt_lr, gradients)
